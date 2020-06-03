@@ -12,7 +12,7 @@
           :key="i"
           :loading="loading"
           transition="scale-transition"
-          height="94"
+          height="64"
           type="list-item-two-line"
         >
           <v-card>
