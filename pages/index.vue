@@ -29,10 +29,13 @@ export default {
 
     // Lazy load ForecastDetails Component
     ForecastDetails: () => import('@/components/ForecastDetails')
+
   },
   data: () => ({
     // Athens (lat,lng) based on Google Maps
-    mapCenter: [37.974003, 23.725907]
+    mapCenter: [37.974003, 23.725907],
+    labels: ['12am', '3am', '6am', '9am', '12pm', '3pm', '6pm', '9pm'],
+    value: [200, 675, 410, 390, 310, 460, 250, 240]
   }),
   computed: {
     ...mapGetters({

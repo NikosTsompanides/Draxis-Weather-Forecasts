@@ -2,16 +2,12 @@
   <v-btn-toggle v-model="toggle" class="ml-4">
     <v-btn small @click="setSortType('asc')">
       Asc
-      <v-icon class="ml-2">
-        mdi-sort-ascending
-      </v-icon>
+      <v-icon class="ml-2" v-text="ascIcon" />
     </v-btn>
 
     <v-btn small @click="setSortType('desc')">
       Desc
-      <v-icon class="ml-2">
-        mdi-sort-descending
-      </v-icon>
+      <v-icon class="ml-2" v-text="descIcon" />
     </v-btn>
   </v-btn-toggle>
 </template>
@@ -26,7 +22,9 @@ export default {
   },
 
   data: () => ({
-    toggle: null
+    toggle: null,
+    ascIcon: 'mdi-sort-ascending',
+    descIcon: 'mdi-sort-descending'
   }),
 
   methods: {

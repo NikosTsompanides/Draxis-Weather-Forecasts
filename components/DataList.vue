@@ -55,7 +55,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 #not-found {
   width: 100%;
   text-align: center;

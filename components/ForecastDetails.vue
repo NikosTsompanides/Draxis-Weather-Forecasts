@@ -2,49 +2,18 @@
   <v-card-text>
     <v-row dense>
       <v-col cols="12" sm="6">
-        <v-menu
-          ref="menu"
-          v-model="menu"
-          :close-on-content-click="false"
-          :return-value.sync="date"
-          transition="scale-transition"
-          offset-y
-          min-width="290px"
-        >
-          <template v-slot:activator="{ on }">
-            <v-text-field
-              v-model="date"
-              dense
-              label="Select Date"
-              outlined
-              prepend-inner-icon="mdi-calendar"
-              readonly
-              v-on="on"
-            />
-          </template>
-          <v-date-picker v-model="date" no-title scrollable>
-            <v-spacer />
-            <v-btn text color="primary" @click="menu = false">
-              Cancel
-            </v-btn>
-            <v-btn text color="primary" @click="saveDate">
-              OK
-            </v-btn>
-          </v-date-picker>
-        </v-menu>
+        <DatePicker />
+      </v-col>
+      <v-col cols="12" sm="6" style="text-align:right">
+        <UIViewButtonGroup />
       </v-col>
     </v-row>
 
-    <v-row dense>
+    <v-row v-if="view === 0" dense>
       <v-col cols="12" sm="6">
-        <v-subheader>
-          <v-icon class="mr-2">
-            mdi-thermometer-lines
-          </v-icon>
-          <span>{{ temperatureTxt }}</span>
-        </v-subheader>
+        <Header :title="temperatureTxt" :icon="temperatureIcon" />
         <v-row dense>
-          <FillterButtonGroup module="temperature" />
+          <SortButtonGroup module="temperature" />
         </v-row>
         <DataList :data="temperature" symbol="°C" />
         <v-row dense>
@@ -53,19 +22,25 @@
       </v-col>
 
       <v-col cols="12" sm="6">
-        <v-subheader>
-          <v-icon class="mr-2">
-            mdi-water-percent
-          </v-icon>
-          <span>{{ humidityTxt }}</span>
-        </v-subheader>
+        <Header :title="humidityTxt" :icon="humidityIcon" />
         <v-row dense>
-          <FillterButtonGroup module="humidity" />
+          <SortButtonGroup module="humidity" />
         </v-row>
         <DataList :data="humidity" symbol="%" />
         <v-row dense>
           <v-pagination v-if="humidity.length" v-model="humidityPage" :length="6" />
         </v-row>
+      </v-col>
+    </v-row>
+
+    <v-row v-else dense>
+      <v-col cols="12">
+        <Header :title="temperatureTxt" :icon="temperatureIcon" />
+        <LineChart :data="temp" />
+      </v-col>
+      <v-col cols="12">
+        <Header :title="humidityTxt" :icon="humidityIcon" />
+        <LineChart :data="hum" />
       </v-col>
     </v-row>
   </v-card-text>
@@ -76,7 +51,11 @@ import { mapState } from 'vuex'
 export default {
   components: {
     DataList: () => import('@/components/DataList'),
-    FillterButtonGroup: () => import('@/components/FillterButtonGroup')
+    SortButtonGroup: () => import('@/components/SortButtonGroup'),
+    DatePicker: () => import('@/components/DatePicker'),
+    UIViewButtonGroup: () => import('@/components/UIViewButtonGroup'),
+    LineChart: () => import('@/components/LineChart'),
+    Header: () => import('@/components/Header')
   },
   props: {
     temperature: {
@@ -89,21 +68,12 @@ export default {
     }
   },
   data: () => ({
-    menu: false,
     temperatureTxt: 'Temperature',
+    temperatureIcon: 'mdi-thermometer-lines',
     humidityTxt: 'Humidity',
-    toggle: null,
-    size: 6
+    humidityIcon: 'mdi-water-percent'
   }),
   computed: {
-    date: {
-      get () {
-        return this.$store.state.date
-      },
-      set (newVal) {
-        this.$store.commit('setDate', newVal)
-      }
-    },
     temperaturePage: {
       get () {
         return this.$store.state.temperature.page
@@ -120,14 +90,13 @@ export default {
         this.$store.commit('humidity/setPage', newVal)
       }
     },
-    ...mapState(['latlng', 'sortType'])
+    ...mapState(['latlng', 'sortType', 'view']),
+    ...mapState({
+      temp: state => state.temperature.array,
+      hum: state => state.humidity.array
+    })
   },
   methods: {
-    async saveDate () {
-      this.$refs.menu.save(this.date)
-      this.$store.commit('setDate', this.date)
-      await this.$store.dispatch('getData')
-    },
     setSortType (type) {
       this.$store.commit('setSortType', type)
     }

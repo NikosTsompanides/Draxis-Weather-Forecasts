@@ -3,13 +3,15 @@ import { objToDataListArray } from '../utils/helpers'
 export const state = () => ({
   latlng: [37.983810, 23.727539],
   date: new Date().toISOString().substr(0, 10),
-  loading: false
+  loading: false,
+  view: 0
 })
 
 export const mutations = {
   setLatLng: (state, latlng) => (state.latlng = latlng),
   setDate: (state, date) => (state.date = date),
-  setLoading: (state, loading) => (state.loading = loading)
+  setLoading: (state, loading) => (state.loading = loading),
+  setView: (state, view) => (state.view = view)
 }
 
 export const getters = {
@@ -38,6 +40,7 @@ export const actions = {
 
       commit('setLoading', false)
     } catch (error) {
+      commit('setLoading', false)
       console.log(error)
       const snackbar = {
         open: true,

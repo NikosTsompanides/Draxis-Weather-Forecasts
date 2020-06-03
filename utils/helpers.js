@@ -25,7 +25,7 @@ export const getArrayPiece = (array, page, size) => {
   return array.slice(start, end)
 }
 
-export const getPaginatedArray = (object, page, size) => {
-  const convertedArray = objToDataListArray(object)
-  return getArrayPiece(convertedArray, page, size)
-}
+// export const getPaginatedArray = (object, page, size) => {
+//   const convertedArray = objToDataListArray(object)
+//   return getArrayPiece(convertedArray, page, size)
+// }
