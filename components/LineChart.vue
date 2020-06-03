@@ -7,8 +7,8 @@
         </div>
       </div>
       <div v-else>
-        <v-card class="mx-auto" color="primary" max-width="calc(100% - 32px)">
-          <v-sparkline :labels="labels" :value="value" color="white" line-width="2" padding="16" />
+        <v-card flat class="mx-auto" max-width="calc(100% - 32px)">
+          <v-sparkline :labels="labels" :value="value" color="primary" line-width="2" padding="16" />
         </v-card>
       </div>
     </v-col>
@@ -37,6 +37,3 @@ export default {
   }
 }
 </script>
-
-<style>
-</style>
